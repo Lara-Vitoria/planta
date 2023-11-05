@@ -81,6 +81,87 @@ const styles = StyleSheet.create({
         fontSize: 48,
         bottom: 8,
         left: 15
+    },
+    info: {
+        color: '#fff',
+        fontSize: 24,
+        paddingLeft: 12,
+        paddingTop: 12
+    },
+    icon: {
+        left: horizontal * .7,
+        bottom: 25
+    },
+    modalBorder: {
+        position: 'absolute',
+        top: vertical * .04,
+        left: horizontal * .05,
+        borderWidth: 1,
+        borderColor: '#62BA46',
+        height: vertical * .94,
+        width: horizontal * .9,
+    },
+    modalTitle: {
+        color: '#62BA46',
+        fontSize: 20,
+        textAlign: 'center',
+        backgroundColor: '#fff',
+        top: -18,
+        left: 32,
+        width: 300,
+    },
+    input: {
+        backgroundColor: '#fff',
+        borderWidth: .5,
+        borderColor: '#62BA46',
+        height: 60,
+        width: 320,
+        left: 12,
+        top: 24,
+        margin: 12,
+        padding: 16,
+    },
+    overlayTextModal: {
+        backgroundColor: '#fff',
+        color: '#62BA46',
+        bottom: 62,
+        left: 38,
+        paddingLeft: 16,
+        width: 120,
+    },
+    dataInput: {
+        top: vertical * .04,
+        left: horizontal * .05,
+        borderWidth: .5,
+        borderColor: '#62BA46',
+        height: vertical * .2,
+        width: horizontal * .8,
+        marginBottom: 32
+    },
+    overlayTextData: {
+        bottom: 162
+    },
+    quantidadeTxt: {
+        color: '#62BA46',
+        bottom: 50,
+        left: 188,
+        fontSize: 28
+    },
+    btnGroup: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        top: vertical * .2,
+    },
+    btn: {
+        borderWidth: 1,
+        borderColor: '#62BA46',
+        height: vertical * .08,
+        width: horizontal * .3,
+    },
+    textBtn: {
+        color: '#62BA46',
+        textAlign: 'center',
+        paddingTop: vertical * .025,
     }
 });
 

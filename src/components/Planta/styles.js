@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     scroll: {
-        minHeight: vertical * 1.22,
+        minHeight: vertical * 1.35,
     },
     overlayText: {
         backgroundColor: '#62BA46',
@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     borderItemInfo: {
+        backgroundColor: '#fff',
         height: vertical * .04,
         width: horizontal * .38,
         top: vertical * .35,
@@ -58,13 +59,14 @@ const styles = StyleSheet.create({
         marginTop: 20
     },
     borderItem: {
+        backgroundColor: '#fff',
         height: vertical * .04,
         width: horizontal * .9,
         top: vertical * .03,
         marginTop: 30
     },
     borderGarfico: {
-        height: vertical * .2,
+        height: vertical * .3,
         width: horizontal * .9,
         top: vertical * .03,
         marginTop: 30
@@ -97,7 +99,7 @@ const styles = StyleSheet.create({
         top: 14
     },
     txtInfo: {
-        color: '#fff',
+        color: '#62BA46',
         textAlign: 'center',
         fontSize: 16
     }

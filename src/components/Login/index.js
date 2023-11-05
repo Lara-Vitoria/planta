@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
-import { Text, View, SafeAreaView, TextInput, TouchableOpacity, Alert } from 'react-native';
+import {
+    Text,
+    View,
+    SafeAreaView,
+    TextInput,
+    TouchableOpacity,
+    Alert
+} from 'react-native';
 
 import styles from './styles';
 import LoginImg from '../../../assets/svgImages/LoginImg';
 
 import api from '../../../service/api';
-import * as Validacao from '../../../Utils/Validacoes'
 export default function Login({ navigation }) {
 
     const [email, setEmail] = useState('');
@@ -24,21 +30,15 @@ export default function Login({ navigation }) {
                 usuarioResponse = response.data
                 navigation.navigate('PagInicial', { usuario: usuarioResponse })
             })
-            .catch(error => Alert.alert(error.response.data));
-    }
+            .catch(error => {
+                if (error.response.data.errors) Alert.alert(error.response.data.errors?.toString())
+                else Alert.alert(error.response.data.error)
 
-    function verificaDados() {
-        if (Validacao.verificaDadosLogin(email, password)) {
-            Alert.alert("Preencha os campos");
-            return;
-        }
-
-        realizaLogin();
+            });
     }
 
     return (
         <View style={styles.containerMain}>
-
             <View style={styles.border}>
                 <SafeAreaView style={styles.inputGroup}>
 
@@ -61,11 +61,7 @@ export default function Login({ navigation }) {
                     <LoginImg />
                 </Text>
 
-
-                <Text style={styles.small}>
-                    Esqueceu a senha?
-                </Text>
-                <TouchableOpacity style={styles.btn} onPress={() => verificaDados()}>
+                <TouchableOpacity style={styles.btn} onPress={() => realizaLogin()}>
                     <Text style={styles.textBtn}>
                         Entrar
                     </Text>
@@ -84,9 +80,8 @@ export default function Login({ navigation }) {
                             para se cadastrar
                         </Text>
                     </View>
-
                 </View>
             </View>
-        </View>
+        </View >
     );
 }

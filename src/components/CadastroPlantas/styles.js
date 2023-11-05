@@ -43,11 +43,17 @@ const styles = StyleSheet.create({
         backgroundColor: '#62BA46',
         borderWidth: .5,
         borderColor: '#fff',
+        color: '#fff',
         height: 60,
         width: 320,
         left: 12,
         margin: 12,
         padding: 16,
+    },
+    dataInput: {
+        width: 320,
+        left: 24,
+        top: 8
     },
     overlayText: {
         color: '#fff',
@@ -119,13 +125,13 @@ const styles = StyleSheet.create({
         width: horizontal * .9,
     },
     modalTitle: {
+        position: 'absolute',
         color: '#62BA46',
         fontSize: 24,
-        textAlign: 'center',
-        backgroundColor: '#fff',
-        top: -18,
-        left: 32,
+        top: vertical * .02,
+        left: horizontal * .2,
         width: 300,
+        backgroundColor: '#fff',
     },
     imgGroup: {
         borderWidth: 1,
@@ -137,9 +143,10 @@ const styles = StyleSheet.create({
         left: horizontal * .17
     },
     fecharModal: {
+        position: 'absolute',
         width: horizontal * .9,
-        right: 1,
-        top: vertical * .57,
+        left: horizontal * .05,
+        top: vertical * .92,
         height: 50,
         backgroundColor: '#62BA46',
     },
@@ -150,4 +157,6 @@ const styles = StyleSheet.create({
     }
 });
 
-export default styles
+
+
+export default styles 

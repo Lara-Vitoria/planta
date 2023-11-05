@@ -1,14 +1,19 @@
-import React from 'react';
-import { Text, View, TouchableOpacity, TextInput, ScrollView, Image } from 'react-native';
-import { useState, useEffect } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
+import React, { useState, useEffect } from 'react';
+import {
+    Text,
+    View,
+    TouchableOpacity,
+    ScrollView,
+    Image
+} from 'react-native';
 
 import api from '../../../service/api';
 import styles from './styles.js';
 export default function ListagemPlantas({ route, navigation }) {
 
-    const usuarioParam = route.params ? route.params.usuarioParam : null;
+    const usuarioParam = route.params ? route.params.usuarioParam.usuarioLogado : null;
     const executaFuncao = route.params ? route.params.executaFuncao : false;
+    const user = route.params ? route.params.usuarioParam : null;
 
     const [plantas, setPlantas] = useState([]);
 
@@ -49,33 +54,33 @@ export default function ListagemPlantas({ route, navigation }) {
             </View>
 
             <ScrollView contentContainerStyle={[styles.scroll, { marginBottom: 20 }]}>
-
                 {
-                    plantas.map((planta, index) => (
-                        <TouchableOpacity key={index.toString()}
-                            style={styles.border}
-                            onPress={() => navigation.navigate('Planta', { usuarioParam: usuarioParam, plantaId: planta.id })}>
-                            <Text style={[styles.overlayText, styles.overlayTextNome]}>{planta.nome}</Text>
+                    plantas.length == 0
+                        ? <Text style={styles.info}>Você não possui nenhuma planta cadastrada</Text>
+                        :
+                        plantas.map((item, index) => (
+                            <TouchableOpacity key={index.toString()}
+                                style={styles.border}
+                                onPress={() => navigation.navigate('Planta', { usuarioParam: user, plantaId: item.id })}
+                            >
+                                <Text style={[styles.overlayText, styles.overlayTextNome]}>{item.nome}</Text>
 
-                            <View style={styles.borderImg}>
-                                <Image
-                                    source={{ uri: planta.imagem }}
-                                    style={styles.img}
-                                />
-                            </View>
+                                <View style={styles.borderImg}>
+                                    <Image source={{ uri: item.imagem }} style={styles.img} />
+                                </View>
 
-                            <View style={[styles.border, styles.borderItem]}>
-                                <Text style={styles.textoInfo}>{planta.especie}</Text>
-                            </View>
+                                <View style={[styles.border, styles.borderItem]}>
+                                    <Text style={styles.textoInfo}>{item.especie}</Text>
+                                </View>
 
-                            <View style={[styles.border, styles.borderItem]}>
-                                <Text style={styles.textoInfo}>{planta.localizacao}</Text>
-                            </View>
-                        </TouchableOpacity>
-                    ))
+                                <View style={[styles.border, styles.borderItem]}>
+                                    <Text style={styles.textoInfo}>{item.localizacao}</Text>
+                                </View>
+                            </TouchableOpacity>
+
+                        ))
                 }
             </ScrollView>
-
         </View>
     );
 }

@@ -1,37 +1,30 @@
 import { useState } from 'react';
-import { Text, View, SafeAreaView, TextInput, TouchableOpacity, Alert } from 'react-native';
+import {
+    Text,
+    View,
+    SafeAreaView,
+    TextInput,
+    TouchableOpacity,
+    Alert
+} from 'react-native';
 
 import api from '../../../service/api';
-import * as Validacao from '../../../Utils/Validacoes';
 
 import styles from './styles';
 import CadastroImg from '../../../assets/svgImages/CadastroImg';
 
 export default function Cadastro({ route, navigation }) {
 
-    const { mode, usuarioParam } = route.params;
+    const { mode } = route.params;
+    const usuarioParam = route.params.usuarioParam ? route.params.usuarioParam.usuarioLogado : null;
+    const user = route.params.usuarioParam;
 
     const [usuario, setUsuario] = useState(mode == 'edit' ? usuarioParam.nome : '');
     const [email, setEmail] = useState(mode == 'edit' ? usuarioParam.email : '');
     const [senha, setSenha] = useState(mode == 'edit' ? usuarioParam.senha : '');
     const [confirmSenha, setConfirmSenha] = useState('');
 
-    async function verificaCampos(email, senha, confirmSenha) {
-        if (Validacao.verificaEmail(email)) {
-            Alert.alert("Digite um email valido");
-            return;
-        }
-
-        else if (Validacao.verificaExistencia(senha)) {
-            Alert.alert("Digite uma senha valida");
-            return;
-        }
-
-        else if (Validacao.verificaSenhasIguais(senha, confirmSenha)) {
-            Alert.alert("As senhas estão diferentes");
-            return;
-        }
-
+    async function verificaCampos() {
         if (mode == 'edit') await edita();
         else if (mode == 'create') await cria();
 
@@ -47,11 +40,10 @@ export default function Cadastro({ route, navigation }) {
 
         await api.post('/usuarios', objUsuario)
             .then(async () => {
-                console.log('entrou')
                 Alert.alert('Usuario criado com sucesso!');
                 navigation.navigate('Login');
             })
-            .catch(error => console.log(error.response.data));
+            .catch(error => Alert.alert(error.response.data.errors.toString()));
     }
 
     async function edita() {
@@ -65,9 +57,8 @@ export default function Cadastro({ route, navigation }) {
 
         await api.put(`/usuarios/${usuarioParam.id}`, objUsuario)
             .then(async () => {
-                console.log('entrou')
                 Alert.alert('Usuario editado com sucesso!');
-                navigation.navigate('PagInicial');
+                navigation.navigate('PagInicial', { usuario: user });
             })
             .catch(error => console.log(error.response.data));
     }
@@ -113,13 +104,23 @@ export default function Cadastro({ route, navigation }) {
 
 
                 <TouchableOpacity style={styles.btn}
-                    onPress={() => verificaCampos(email, senha, confirmSenha)}>
+                    onPress={() => verificaCampos()}>
                     {
                         mode == 'create'
                             ? <Text style={styles.textBtn}> Se cadastrar </Text>
                             : <Text style={styles.textBtn}> Salvar </Text>
                     }
                 </TouchableOpacity>
+
+                {
+                    mode == 'edit'
+                        ? <TouchableOpacity style={[styles.btn, styles.btnSair]}
+                            onPress={() => navigation.navigate('Login')}>
+                            <Text style={styles.textBtn}> Sair </Text>
+                        </TouchableOpacity>
+                        : null
+                }
+
             </View>
 
             <View style={styles.img}>

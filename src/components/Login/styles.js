@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#62BA46',
         borderWidth: .5,
         borderColor: '#fff',
+        color: '#fff',
         height: 60,
         width: 320,
         left: 12,
@@ -41,13 +42,6 @@ const styles = StyleSheet.create({
         width: 80,
         backgroundColor: '#62BA46',
         color: '#fff'
-    },
-    small: {
-        position: 'absolute',
-        color: '#fff',
-        fontSize: 12,
-        right: horizontal * .06,
-        top: vertical * .4,
     },
     img: {
         top: 340,

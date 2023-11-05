@@ -1,8 +1,6 @@
-import { Text, View, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import { Text, View, TouchableOpacity, Dimensions } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather, AntDesign } from '@expo/vector-icons';
-import { Dimensions } from 'react-native';
-import { useState, useEffect } from 'react';
 
 import ListagemPlantas from '../ListagemPlantas';
 import CadastroPlantas from '../CadastroPlantas';
@@ -61,7 +59,7 @@ export default function NavTab({ navigation, usuario }) {
                 options={{
                     title: 'Cadastro',
                     tabBarIcon: () => (
-                        usuario.cargo == 'usuario'
+                        usuario.usuarioLogado.cargo == 'usuario'
                             ?
                             <TouchableOpacity onPress={() => navigation.navigate('Cadastro', { mode: 'edit', usuarioParam: usuario })}>
                                 <AntDesign name="user" size={32} color="#fff" />

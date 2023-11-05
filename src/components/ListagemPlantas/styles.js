@@ -35,24 +35,23 @@ const styles = StyleSheet.create({
     },
     overlayTextNome: {
         width: horizontal * .25,
-        right: horizontal * .07,
+        right: horizontal * .3,
         paddingLeft: 30
+    },
+    plantasGroup: {
+        flexDirection: 'row',
     },
     scroll: {
         minHeight: vertical,
-        flexDirection: 'row',
-        width: horizontal * 1
     },
     border: {
         top: -32,
-        left: 32,
         borderWidth: 1,
         borderColor: '#fff',
         backgroundColor: 'transparent',
         height: vertical * .32,
-        width: horizontal * .4,
+        width: horizontal * .8,
         marginTop: 48,
-        marginRight: 32
     },
     borderImg: {
         position: 'absolute',
@@ -63,11 +62,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
 
         height: vertical * .12,
-        width: horizontal * .3,
+        width: horizontal * .68,
     },
     borderItem: {
         height: vertical * .04,
-        width: horizontal * .3,
+        width: horizontal * .68,
         top: 135,
         left: 24,
         marginTop: 20
@@ -75,13 +74,14 @@ const styles = StyleSheet.create({
     img: {
         width: 80,
         height: 80,
-        left: 16,
+        left: horizontal * .25,
         top: 8
     },
     textoInfo: {
         color: '#fff',
         left: 12,
-        top: 4
+        top: 4,
+        textAlign: 'center'
     },
     navBar: {
         position: 'absolute',

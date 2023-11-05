@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Text, View, Image, TextInput, TouchableOpacity, Alert } from 'react-native';
+import React from 'react';
+import { Text, View, TouchableOpacity, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
 import styles from './styles';
@@ -9,7 +9,7 @@ import OpcoesAdminImg from '../../../assets/svgImages/OpcoesAdminImg';
 import NavTab from '../NavTab';
 export default function OpcoesAdmin({ route, navigation }) {
 
-    const { usuarioParam } = route.params;
+    const { usuarioParam, token } = route.params;
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -53,7 +53,7 @@ export default function OpcoesAdmin({ route, navigation }) {
                     </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('ListagemUsuarios', { usuarioParam: usuarioParam })}>
+                <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('ListagemUsuarios', { usuarioParam: usuarioParam, token: token })}>
                     <Text style={styles.textBtn}>
                         Listar Usuarios
                     </Text>

@@ -1,27 +1,31 @@
-import { Text, View, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { useState, useEffect } from 'react';
+import {
+    Text,
+    View,
+    Alert,
+    ScrollView
+} from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
 import styles from './styles.js';
 import api from '../../../service/api';
 import NavTab from '../NavTab';
 export default function ListagemUsuarios({ route, navigation }) {
-    const { usuarioParam } = route.params;
 
+    const { usuarioParam } = route.params;
     const [usuarios, setUsuarios] = useState([]);
 
     useEffect(
         () => {
-            console.log('Usuario:executando useffect da listagem');
             getUsuarios();
         }, []);
 
     async function getUsuarios() {
-        await api.get(`/usuarios/${usuarioParam.cargo}/all`)
+        await api.get(`/usuarios/${usuarioParam.usuarioLogado.cargo}/all`, { headers: { 'Authorization': `Bearer ${usuarioParam.token}` } })
             .then(async (response) => {
                 setUsuarios(response.data)
             })
-            .catch(error => Alert.alert(error.response.data));
+            .catch(error => Alert.alert(error));
     }
 
     async function deletaUsuario(id) {
@@ -30,7 +34,7 @@ export default function ListagemUsuarios({ route, navigation }) {
                 Alert.alert('Usuario deletado com sucesso!');
                 getUsuarios();
             })
-            .catch(error => Alert.alert(error.response.data));
+            .catch(error => console.log(error));
     }
 
     return (

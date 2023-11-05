@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#62BA46',
         borderWidth: .5,
         borderColor: '#fff',
+        color: '#fff',
         height: 60,
         width: 320,
         left: 12,
@@ -51,6 +52,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderColor: '#fff',
         borderWidth: .5,
+    },
+    btnSair: {
+        top: vertical * .78,
     },
     textBtn: {
         color: '#fff',

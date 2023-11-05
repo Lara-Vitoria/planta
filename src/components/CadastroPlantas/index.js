@@ -1,8 +1,20 @@
-import { Text, View, TouchableOpacity, TextInput, SafeAreaView, Alert, Switch, Modal, FlatList, Image } from 'react-native';
 import { useState, useEffect } from 'react';
+import {
+    Text,
+    View,
+    TouchableOpacity,
+    TextInput,
+    SafeAreaView,
+    Alert,
+    Switch,
+    Modal,
+    ScrollView,
+    Image,
+    Dimensions
+} from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import DropDownPicker from 'react-native-dropdown-picker';
 
-import * as Validacao from '../../../Utils/Validacoes';
 import api from '../../../service/api';
 
 import styles from './styles.js';
@@ -10,12 +22,14 @@ import CadastroPlantaImg from '../../../assets/svgImages/CadastroPlantaImg';
 
 export default function CadastroPlantas({ route, navigation }) {
 
-    const { mode, plantaId, usuarioParam } = route.params;
+    const { mode, plantaId } = route.params;
+    const usuarioParam = route.params.usuarioParam.usuarioLogado
+    const user = route.params.usuarioParam;
 
     const [nome, setNome] = useState();
     const [especie, setEspecie] = useState('');
     const [localizacao, setLocalizacao] = useState('');
-    const [diaDeRegar, setDiaDeRegar] = useState('');
+    const [diaDeRegar, setDiaDeRegar] = useState(null);
     const [fertilizante, setFertilizante] = useState(false);
     const [luz, setLuz] = useState(false);
 
@@ -23,8 +37,21 @@ export default function CadastroPlantas({ route, navigation }) {
     const [imagens, setImagens] = useState([]);
     const [imagemSelecionada, setImagemSelecionada] = useState(null);
 
+    const [open, setOpen] = useState(false);
+    const [items, setItems] = useState([
+        { label: 'Segunda', value: 'segunda' },
+        { label: 'Terça', value: 'terça' },
+        { label: 'Quarta', value: 'quarta' },
+        { label: 'Quinta', value: 'quinta' },
+        { label: 'Sexta', value: 'sexta' },
+        { label: 'Sábado', value: 'sabado' },
+        { label: 'Domingo', value: 'domingo' },
+    ]);
+
     const toggleFertilizante = () => setFertilizante(estadoAnterior => !estadoAnterior);
     const toggleLuz = () => setLuz(estadoAnterior => !estadoAnterior);
+
+    const vertical = Dimensions.get('window').height;
 
     useEffect(
         () => {
@@ -63,6 +90,9 @@ export default function CadastroPlantas({ route, navigation }) {
             .catch(error => console.log(error.response.data));
     }
     async function realizaCadastro() {
+
+        const imagemId = imagemSelecionada ? imagemSelecionada.id : null;
+
         let objPlanta = {
             data: {
                 nome,
@@ -71,17 +101,20 @@ export default function CadastroPlantas({ route, navigation }) {
                 diaDeRegar,
                 fertilizante,
                 luz,
-                imagemId: imagemSelecionada.id,
+                imagemId: imagemId,
                 usuarioId: usuarioParam.id
             }
         };
-
         await api.post('/plantas', objPlanta)
             .then(async (response) => {
                 Alert.alert('Planta cadastrada com sucesso!');
-                navigation.navigate('PagInicial', { usuario: usuarioParam })
+                navigation.navigate('PagInicial', { usuario: user })
             })
-            .catch(error => console.log(error));
+            .catch(error => {
+                if (error.response.data.errors) Alert.alert(error.response.data.errors?.toString())
+                else Alert.alert(error.response.data.error)
+
+            });
     }
 
     async function realizaEdicao() {
@@ -99,32 +132,16 @@ export default function CadastroPlantas({ route, navigation }) {
         await api.put(`/plantas/${plantaId}`, objPlanta)
             .then(async () => {
                 Alert.alert('Planta editada com sucesso!');
-                navigation.navigate('PagInicial', { usuario: usuarioParam });
+                navigation.navigate('PagInicial', { usuario: user });
             })
-            .catch(error => console.log(error.response.data));
+            .catch(error => {
+                if (error.response.data.errors) Alert.alert(error.response.data.errors?.toString())
+                else Alert.alert(error.response.data.error)
+
+            });
     }
 
     function verificaDados() {
-        if (Validacao.verificaExistencia(nome)) {
-            Alert.alert("Preencha o nome");
-            return;
-        }
-
-        if (Validacao.verificaExistencia(especie)) {
-            Alert.alert("Preencha a espécie");
-            return;
-        }
-
-        if (Validacao.verificaExistencia(localizacao)) {
-            Alert.alert("Preencha a localizacao");
-            return;
-        }
-
-        if (Validacao.verificaDiaSemana(diaDeRegar)) {
-            Alert.alert("Preencha os campos");
-            return;
-        }
-
         if (mode == 'edit') realizaEdicao();
         else if (mode == 'create') realizaCadastro();
     }
@@ -162,9 +179,8 @@ export default function CadastroPlantas({ route, navigation }) {
                 </View>
 
                 <Modal visible={modalVisible} animationType="slide">
-                    <View style={styles.modalBorder}>
-                        <Text style={styles.modalTitle}>Escolha uma imagem</Text>
-
+                    <Text style={styles.modalTitle}>Escolha uma imagem</Text>
+                    <ScrollView contentContainerStyle={{ minHeight: vertical * 1.3, marginBottom: 20 }} style={styles.modalBorder}>
                         {
                             imagens.map((imagem, index) => (
                                 <View style={styles.imgGroup} key={index.toString()}>
@@ -179,14 +195,13 @@ export default function CadastroPlantas({ route, navigation }) {
                             ))
                         }
 
-                        <TouchableOpacity style={styles.fecharModal} onPress={fecharModal}>
-                            <Text style={styles.fecharModalTxt}>Fechar</Text>
-                        </TouchableOpacity>
-                    </View>
+                    </ScrollView>
+                    <TouchableOpacity style={styles.fecharModal} onPress={fecharModal}>
+                        <Text style={styles.fecharModalTxt}>Fechar</Text>
+                    </TouchableOpacity>
                 </Modal>
 
                 <SafeAreaView style={styles.inputGroup}>
-
                     <View>
                         <TextInput
                             style={styles.input}
@@ -211,12 +226,26 @@ export default function CadastroPlantas({ route, navigation }) {
                         <Text style={styles.overlayText}>Localização</Text>
                     </View>
 
-                    <View>
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={(diaRegar) => setDiaDeRegar(diaRegar)}
-                            value={diaDeRegar} />
-                        <Text style={styles.overlayText}>Dia de regar</Text>
+                    <View style={styles.dataInput}>
+                        <DropDownPicker
+                            placeholder="Dia de regar"
+                            open={open}
+                            value={diaDeRegar}
+                            items={items}
+                            setOpen={setOpen}
+                            setValue={setDiaDeRegar}
+                            setItems={setItems}
+                            maxHeight={400}
+                            style={{
+                                backgroundColor: '#fff',
+                                borderWidth: .5,
+                                borderColor: '#62BA46',
+                            }}
+                            textStyle={{
+                                backgroundColor: '#fff',
+                                color: '#62BA46',
+                            }}
+                        />
                     </View>
 
                     <View>
